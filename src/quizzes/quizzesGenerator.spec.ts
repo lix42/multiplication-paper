@@ -1,11 +1,4 @@
-import { generateAllQuizzes, pickQuizzes, Quiz } from "./quizzesGenerator";
-
-describe("generateAllQuizzes", () => {
-  it("should return all test cases", () => {
-    const quizzes = generateAllQuizzes();
-    expect(quizzes).toMatchSnapshot();
-  });
-});
+import { pickQuizzes, Quiz } from "./quizzesGenerator";
 
 describe("pickQuizzes", () => {
   const candidates: Quiz[] = [
