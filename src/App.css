@@ -17,8 +17,14 @@
 
 .quizzes-container {
   width: 100%;
+}
+
+.quiz-page {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
+  break-after: page;
+  break-inside: avoid-page;
 }
 
 .quiz {
@@ -30,11 +36,15 @@
 }
 
 @media print {
+  .container {
+    margin: 0;
+  }
   .controller-bar {
     display: none;
   }
   .quiz {
     font-size: 10mm;
-    margin: 4mm 0;
+    margin: 0;
+    margin-top: 4mm;
   }
 }
