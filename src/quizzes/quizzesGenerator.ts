@@ -12,39 +12,57 @@ const isNum = (n?: number): n is Num =>
   n != null && Number.isFinite(n) && n >= minNum && n <= maxNum;
 
 const frequency: { [key in Num]: number } = {
-  2: 4,
-  3: 6,
-  4: 6,
-  5: 4,
-  6: 8,
-  7: 8,
-  8: 8,
-  9: 8,
-  10: 1,
+  2: 1,
+  3: 2,
+  4: 2,
+  5: 3,
+  6: 6,
+  7: 6,
+  8: 6,
+  9: 3,
+  10: 0,
   11: 3,
   12: 3,
 };
+const threshold = 1;
 
 export const generateAllQuizzes = (count = 1): Quiz[] => {
   let result: Quiz[] = [];
+  let num = 0;
   for (let first = minNum; first <= maxNum; first++) {
     for (let second = minNum; second <= first; second++) {
-      if (isNum(first) && isNum(second)) {
-        for (let i = 0; i < frequency[first] * frequency[second]; i++) {
-          result.push({ first, second });
+      if (
+        isNum(first) &&
+        isNum(second) &&
+        isNum(frequency[first]) &&
+        isNum(frequency[second])
+      ) {
+        const repeat = frequency[first] * frequency[second] - threshold;
+        if (repeat > 0) {
+          num++;
+          for (let i = 0; i < repeat; i++) {
+            result.push({ first, second });
+          }
         }
       }
     }
   }
-  while (result.length < count) {
+  while (num < count) {
     result = [...result, ...result];
+    num += num;
   }
   return result;
 };
 
 export const pickQuizzes = (candidates: Quiz[], count: number): Quiz[] => {
   let candidatesLength = candidates.length;
-  return candidates.reduce((accu: Quiz[], quiz, index) => {
+  const temp = candidates.reduce((accu: Quiz[], quiz, index) => {
+    if (accu.length > 0) {
+      const lastQuiz = accu[accu.length - 1] ?? { first: 0, second: 0 };
+      if (quiz.first === lastQuiz.first && quiz.second === lastQuiz.second) {
+        return accu;
+      }
+    }
     const candidateCount = candidatesLength - index;
     const resultLeft = count - accu.length;
     if (Math.random() * candidateCount < resultLeft) {
@@ -52,6 +70,10 @@ export const pickQuizzes = (candidates: Quiz[], count: number): Quiz[] => {
     }
     return accu;
   }, []);
+  if (temp.length < count) {
+    return [...temp, ...pickQuizzes(candidates, count - temp.length)];
+  }
+  return temp;
 };
 
 export const shuffleQuizzes = (quizzes: Quiz[]): Quiz[] => {

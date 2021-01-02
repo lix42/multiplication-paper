@@ -6,7 +6,7 @@ import { Page } from "./Page";
 const INITIAL_COUNT = 32;
 function App() {
   const [count, setCount] = useState(INITIAL_COUNT);
-  const [pages, setPages] = useState(5);
+  const [pages, setPages] = useState(10);
   const [quizzes, setQuizzes] = useState(() => prepareQuizzes(count));
   const updateQuizzes = useCallback(() => {
     const totalCount = count * pages;
