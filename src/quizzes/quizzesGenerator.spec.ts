@@ -1,4 +1,16 @@
-import { pickQuizzes, Quiz } from "./quizzesGenerator";
+import {
+  generateAllQuizzes,
+  pickQuizzes,
+  prepareQuizzes,
+  Quiz,
+} from "./quizzesGenerator";
+
+describe("generateAllQuizzes", () => {
+  it("should generate quizzes more than required count", () => {
+    const all = generateAllQuizzes(128);
+    expect(all.length).not.toBeLessThan(128);
+  });
+});
 
 describe("pickQuizzes", () => {
   const candidates: Quiz[] = [
@@ -26,5 +38,16 @@ describe("pickQuizzes", () => {
       const set = new Set(result);
       expect(set.size).toBe(i);
     }
+  });
+  it("should return the quizzes of required count", () => {
+    const result = pickQuizzes(generateAllQuizzes(64), 64);
+    expect(result).toHaveLength(64);
+  });
+});
+
+describe("prepareQuizzes", () => {
+  it("should return the quizzes of required count", () => {
+    const result = prepareQuizzes(128);
+    expect(result).toHaveLength(128);
   });
 });
