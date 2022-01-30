@@ -47,7 +47,7 @@ export const generateAllQuizzes = (count = 1): Quiz[] => {
       }
     }
   }
-  while (num < count) {
+  while (num < count * 2) {
     result = [...result, ...result];
     num += num;
   }
@@ -57,17 +57,18 @@ export const generateAllQuizzes = (count = 1): Quiz[] => {
 export const pickQuizzes = (candidates: Quiz[], count: number): Quiz[] => {
   let candidatesLength = candidates.length;
   const temp = candidates.reduce((accu: Quiz[], quiz, index) => {
+    const candidateCount = candidatesLength - index;
+    const resultLeft = count - accu.length;
+    if (Math.random() * candidateCount > resultLeft) {
+      return accu;
+    }
     if (accu.length > 0) {
-      const lastQuiz = accu[accu.length - 1] ?? { first: 0, second: 0 };
+      const lastQuiz = accu[accu.length - 1];
       if (quiz.first === lastQuiz.first && quiz.second === lastQuiz.second) {
         return accu;
       }
     }
-    const candidateCount = candidatesLength - index;
-    const resultLeft = count - accu.length;
-    if (Math.random() * candidateCount < resultLeft) {
-      accu.push(quiz);
-    }
+    accu.push(quiz);
     return accu;
   }, []);
   if (temp.length < count) {
@@ -94,7 +95,7 @@ export const shakeQuiz = (quiz: Quiz): Quiz =>
 
 export const prepareQuizzes = (count: number) => {
   const candidates = generateAllQuizzes(count);
-  const picked = pickQuizzes(candidates, count);
-  const shuffled = shuffleQuizzes(picked);
-  return shuffled.map(shakeQuiz);
+  const shuffled = shuffleQuizzes(candidates);
+  const picked = pickQuizzes(shuffled, count);
+  return picked.map(shakeQuiz);
 };
