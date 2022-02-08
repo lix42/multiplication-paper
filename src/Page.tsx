@@ -18,7 +18,9 @@ export const Page: FC<PageProp> = ({ pageIndex, count, quizzes }) => {
     const quiz = quizzes[index];
     quizElements.push(
       <span className="quiz">
-        {quiz.first} X {quiz.second} =
+        {Math.random() > 0.4
+          ? `${quiz.first} X ${quiz.second} =`
+          : `${quiz.first * quiz.second} ÷ ${quiz.first} =`}
       </span>
     );
   }
