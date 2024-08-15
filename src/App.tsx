@@ -6,7 +6,7 @@ import { Page } from "./Page";
 const INITIAL_COUNT = 32;
 function App() {
   const [count, setCount] = useState(INITIAL_COUNT);
-  const [pages, setPages] = useState(20);
+  const [pages, setPages] = useState(40);
   const [quizzes, setQuizzes] = useState(() => prepareQuizzes(count));
   const updateQuizzes = useCallback(() => {
     const totalCount = count * pages;
@@ -47,7 +47,7 @@ function App() {
         </button>
       </div>
       <div className="quizzes-container">
-        {new Array(pages).fill("").map((_, index) => (
+        {Array.from({ length: pages }, (_, index) => (
           <Page pageIndex={index} count={count} quizzes={quizzes} />
         ))}
       </div>
